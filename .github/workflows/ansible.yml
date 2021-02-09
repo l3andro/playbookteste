@@ -11,4 +11,4 @@ jobs:
         - name: Trigger Ansible Tower - Playbook teste
           uses: docker://l3andro4mc/httpie:v1.0
           with:
-            args: ["POST", "https://ansible-awx-hmlg.moip.com.br/api/v2/job_templates/9/launch/", "Authorization:Bearer ${{ secrets.AWX_TOKEN }}"]
+            args: "POST https://ansible-awx-hmlg.moip.com.br/api/v2/job_templates/9/launch/ Authorization:Bearer ${{ secrets.AWX_TOKEN }}"
