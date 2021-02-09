@@ -1,0 +1,12 @@
+name: Jenkins-Integration
+on:
+  pull_request:
+    types: [closed]
+jobs:
+  Jenkins-Integration:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+        - name: Trigger Ansible Tower - Playbook teste
+          uses: docker://l3andro4mc/httpie:v1.0
+          args: [POST", "https://ansible-awx-hmlg.moip.com.br/api/v2/job_templates/9/launch/", "Authorization:Bearer ${{ secrets.AWX_TOKEN }}"]
