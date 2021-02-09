@@ -2,7 +2,6 @@ name: Ansible-Integration
 on:
   pull_request:
     types: [closed]
-resolves:
   
 jobs:
   Jenkins-Integration:
