@@ -1,4 +1,4 @@
 # playbookteste
 Playbook Ansible Teste
 
-Alteracao
+ok
