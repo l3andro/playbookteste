@@ -3,7 +3,16 @@
     become: yes
     tasks:
 
+      - name: Check file exist
+        stat: path=/tmp/arquivoteste.txt
+        register: file_check
+
+      - name: Fail if file exist
+        fail: msg="File /tmp/arquivoteste.txt already exist"
+        when: file_check.stat.exists == True
+
       - name: "Create File"
         file:
             state: touch
             path: "/tmp/arquivoteste.txt"
+        when: file_check.stat.exists == False
