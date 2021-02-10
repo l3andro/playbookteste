@@ -1,0 +1,9 @@
+---
+  - hosts: all
+    become: yes
+    tasks:
+
+      - name: "Remove File"
+        file:
+            state: absent
+            path: "/tmp/arquivoteste.txt"
