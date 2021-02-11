@@ -1,0 +1,12 @@
+---
+  - hosts: all
+    become: yes
+    tasks:
+
+      - name: Check file exist
+        stat: path=/tmp/arquivoteste.txt
+        register: file_check
+
+      - name: Fail if file not exist
+        fail: msg="File /tmp/arquivoteste.txt not exist"
+        when: file_check.stat.exists == False
