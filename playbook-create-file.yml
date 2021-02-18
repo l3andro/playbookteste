@@ -1,9 +1,0 @@
----
-  - hosts: all
-    become: yes
-    tasks:
-
-      - name: "Create File"
-        file:
-            state: touch
-            path: "/tmp/arquivoteste.txt"

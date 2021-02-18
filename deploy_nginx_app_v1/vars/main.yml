@@ -1,0 +1,4 @@
+---
+# vars file for deploy_nginx_app_v1
+webserver_packages:
+  - nginx
