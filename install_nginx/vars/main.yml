@@ -1,0 +1,4 @@
+---
+# vars file for install_nginx
+webserver_packages:
+  - nginx
