@@ -5,10 +5,13 @@
     name: "{{ webserver_packages }}"
     state: absent
 
+# Gather EC2 metadata facts
+- amazon.aws.ec2_metadata_facts:
+
 - name: Remove the Env tag
   amazon.aws.ec2_tag:
     region: us-east-1
-    resource: "{{ ansible_host.instance_id }}"
+    resource: "{{ ansible_ec2_instance_id }}"
     tags:
       Env:
     state: absent
