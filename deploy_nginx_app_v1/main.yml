@@ -1,0 +1,6 @@
+---
+- name: Remove Nginx
+  hosts: all
+
+  roles:
+    - deploy_nginx_app_v1

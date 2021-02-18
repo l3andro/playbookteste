@@ -1,0 +1,6 @@
+---
+# handlers file for deploy_nginx_app_v2
+- name: Reload NGINX
+  service:
+    name: nginx
+    state: reloaded
