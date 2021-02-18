@@ -1,12 +1,4 @@
 ---
-plugin: aws_ec2 
-regions:
-  - us-east-1
-filters:
-  tag:awx_inventory: teste
-  tag:awx_app: nginx
-  instance-state-name : running
-
 # tasks file for install_nginx
 - name: Install packages
   package:
@@ -21,4 +13,3 @@ filters:
     group: root
     mode: 0644
   notify: Reload NGINX
-
