@@ -10,6 +10,7 @@
 
 - name: Remove the Env tag
   hosts: localhost
+  connection: local
   amazon.aws.ec2_tag:
     region: us-east-1
     resource: "{{ ansible_ec2_instance_id }}"
