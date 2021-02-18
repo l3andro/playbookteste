@@ -1,0 +1,15 @@
+---
+# tasks file for remove_nginx
+- name: Remove packages
+  package:
+    name: "{{ webserver_packages }}"
+    state: absent
+
+- name: Remove the Env tag
+  amazon.aws.ec2_tag:
+    region: us-east-1
+    resource: "{{ ansible_host.instance_id }}"
+    tags:
+      Env:
+    state: absent
+    

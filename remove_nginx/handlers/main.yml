@@ -1,0 +1,6 @@
+---
+# handlers file for remove_nginx
+- name: Reload NGINX
+  service:
+    name: nginx
+    state: reloaded

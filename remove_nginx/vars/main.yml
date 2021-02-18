@@ -1,0 +1,4 @@
+---
+# vars file for remove_nginx
+webserver_packages:
+  - nginx

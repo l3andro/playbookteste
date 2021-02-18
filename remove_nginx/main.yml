@@ -1,0 +1,6 @@
+---
+- name: Remove Nginx
+  hosts: all
+
+  roles:
+    - remove_nginx
