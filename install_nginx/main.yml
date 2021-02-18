@@ -2,5 +2,5 @@
 - name: Install Nginx
   hosts: all
 
- roles:
+  roles:
     - install_nginx
