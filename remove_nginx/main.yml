@@ -4,7 +4,3 @@
 
   roles:
     - remove_nginx
-
-collections:
-# With just the collection name
-- amazon.aws
