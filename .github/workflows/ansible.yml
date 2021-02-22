@@ -10,4 +10,4 @@ jobs:
         - name: Get Playbook Id from Ansible Tower
           if: startsWith( github.event.pull_request.title, 'playbook' )
           id: get_playbook_id
-          run: echo "Teste OK"
+          run: echo "Teste OK "
