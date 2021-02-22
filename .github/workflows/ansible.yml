@@ -1,9 +1,10 @@
 name: Ansible-Integration
 on:
-  pull_request_review_comment:
+  issue_comment:
     types: [created]
 jobs:
   Ansible-Integration:
+    if: github.event.issue.pull_request
     runs-on: self-hosted
     steps:
         - name: Get Playbook Id from Ansible Tower
