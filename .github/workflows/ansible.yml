@@ -18,7 +18,9 @@ jobs:
           run: echo "::set-output name=workflow_id::$(curl -k -X GET -H 'Authorization:Bearer ${{ secrets.AWX_TOKEN }}' https://ansible-awx-hmlg.wirecard.int/api/v2/workflow_job_templates/?name=${{github.event.pull_request.title}} |jq -r .results[0].id)"
 
         - name: Running Playbook
-          run: echo "${{ steps.get_playbook_id.outcome }}"
+          if: steps.get_playbook_id.outcome == 'success' 
+          run: curl -k -X POST -H 'Authorization:Bearer ${{ secrets.AWX_TOKEN }}' https://ansible-awx-hmlg.wirecard.int/api/v2/job_templates/${{steps.get_playbook_id.outputs.playbook_id}}/launch
 
         - name: Running Workflow
-          run: echo "${{ steps.get_workflow_id.outcome }}"
+          if: steps.get_workflow_id.outcome == 'success' 
+          run: curl -k -X POST -H 'Authorization:Bearer ${{ secrets.AWX_TOKEN }}' https://ansible-awx-hmlg.wirecard.int/api/v2/workflow_job_templates/${{steps.get_workflow_id.outputs.workflow_id}}/launch
