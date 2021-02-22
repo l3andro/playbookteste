@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - name: Get Job Id from Ansible Tower
-          run: echo '::set-env name=playbook_id::$(curl -i -X GET -H "Authorization:Bearer ${{ secrets.AWX_TOKEN }}" https://ansible-awx-hmlg.wirecard.int/api/v2/job_templates/?name=playbook_${{github.event.pull_request.title}} | jq .results.id'
+          run: echo "::set-output name=playbook_id::$(curl -i -X GET -H 'Authorization:Bearer ${{ secrets.AWX_TOKEN }}' https://ansible-awx-hmlg.wirecard.int/api/v2/job_templates/?name=playbook_${{github.event.pull_request.title}} | jq .results.id)"
 
         - name: Show id Playbook
-          run: echo "Playbook ID is ${{ env.playbook_id }}"
+          run: echo "Playbook ID is ${{ steps.get_playbook_id.outputs.response }}"
