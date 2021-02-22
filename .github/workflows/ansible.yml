@@ -12,4 +12,4 @@ jobs:
           run: echo "::set-output name=playbook_id::$(curl -k -i -X GET -H 'Authorization:Bearer ${{ secrets.AWX_TOKEN }}' https://ansible-awx-hmlg.wirecard.int/api/v2/job_templates/?name=playbook_${{github.event.pull_request.title}} )"
 
         - name: Show id Playbook
-          run: echo "Playbook ID is ${{ fromJson(steps.get_playbook_id.outputs.playbook_id).results.id }}"
+          run: echo "Playbook ID is ${{ fromJson(steps.get_playbook_id.outputs.playbook_id).}}"
