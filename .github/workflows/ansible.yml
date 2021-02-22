@@ -7,10 +7,18 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: self-hosted
     steps:
-        - name: Get Job Id from Ansible Tower
+        - name: Get Playbook Id from Ansible Tower
+          if: startsWith( github.event.pull_request.title, 'playbook' )
           id: get_playbook_id
-          run: echo "::set-output name=playbook_id::$(curl -k -X GET -H 'Authorization:Bearer ${{ secrets.AWX_TOKEN }}' https://ansible-awx-hmlg.wirecard.int/api/v2/job_templates/?name=playbook_${{github.event.pull_request.title}} |jq -r .results[0].id)"
+          run: echo "::set-output name=playbook_id::$(curl -k -X GET -H 'Authorization:Bearer ${{ secrets.AWX_TOKEN }}' https://ansible-awx-hmlg.wirecard.int/api/v2/job_templates/?name=${{github.event.pull_request.title}} |jq -r .results[0].id)"
 
-        - name: Show id Playbook
-          run: |
-              echo "${{ steps.get_playbook_id.outputs.playbook_id }}"
+        - name: Get Workflow Id from Ansible Tower
+          if: startsWith( github.event.pull_request.title, 'workflow' )
+          id: get_workflow_id
+          run: echo "::set-output name=workflow_id::$(curl -k -X GET -H 'Authorization:Bearer ${{ secrets.AWX_TOKEN }}' https://ansible-awx-hmlg.wirecard.int/api/v2/workflow_job_templates/?name=${{github.event.pull_request.title}} |jq -r .results[0].id)"
+
+        - name: Running Playbook
+          run: echo "${{ steps.get_playbook_id.outcome }}"
+
+        - name: Running Workflow
+          run: echo "${{ steps.get_workflow_id.outcome }}"
