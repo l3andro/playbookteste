@@ -9,9 +9,8 @@ jobs:
     steps:
         - name: Get Job Id from Ansible Tower
           id: get_playbook_id
-          run: echo "::set-output name=playbook_id::$(curl -ik -X POST -H 'Authorization:Bearer ${{ secrets.AWX_TOKEN }}' https://ansible-awx-hmlg.wirecard.int/api/v2/job_templates/?name=playbook_${{github.event.pull_request.title}}/launch )"
+          run: echo "::set-output name=playbook_id::$(curl -ivk -X GET -H 'Authorization:Bearer ${{ secrets.AWX_TOKEN }}' https://ansible-awx-hmlg.wirecard.int/api/v2/job_templates/?name=playbook_${{github.event.pull_request.title}}/launch |jq .results.id)"
 
         - name: Show id Playbook
           run: |
               echo "${{ steps.get_playbook_id.outputs.playbook_id }}"
-              echo "$(jq -r '.results')"
