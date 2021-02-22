@@ -2,13 +2,14 @@ name: Ansible-Integration
 on:
   pull_request:
     types: [closed]
-  
 jobs:
-  Jenkins-Integration:
+  Ansible-Integration:
     if: github.event.pull_request.merged == true
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
-        - name: Trigger Ansible Tower - Playbook teste
-          uses: docker://l3andro4mc/httpie:v1.0
-          with:
-            args: "--verify=no POST https://ansible-awx-hmlg.wirecard.int/api/v2/job_templates/9/launch/ 'Authorization:Bearer ${{ secrets.AWX_TOKEN }}'"
+        - name: Get Job Id from Ansible Tower
+          run: echo "::set-output name=playbook_id::$(curl -i -X GET -H 'Authorization:Bearer ${{ secrets.AWX_TOKEN }}' https://ansible-awx-hmlg.wirecard.int/api/v2/job_templates/?name=playbook_${{github.event.pull_request.title}} | jq .results.id"
+          id: get_playbook_id
+
+        - name: Show id Playbook
+          run: echo "Playbook ID is ${{ steps.get_playbook_id.outputs.playbook_id }}"
