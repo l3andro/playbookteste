@@ -14,4 +14,4 @@ jobs:
         - name: Show id Playbook
           run: |
               echo "${{ steps.get_playbook_id.outputs.playbook_id }}"
-              echo "$(jq -r '.results)"
+              echo "$(jq -r '.results')"
