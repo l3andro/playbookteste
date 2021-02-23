@@ -26,6 +26,15 @@ jobs:
         - name: Playbook Job Output - Ansible Tower
           run: curl -k -X GET -H 'Authorization:Bearer hctqGx2DT6KnccCVhFORyt8JxYW5eN' https://ansible-awx-hmlg.wirecard.int/api/v2/jobs/${{steps.playbook_check.outputs.playbook_job_id}}/stdout/?format=ansi > playbook_output
 
+        - name: Get Output
+          id: playbook_output
+          run: |
+            body=$(cat playbook_output)
+            body="${body//'%'/'%25'}"
+            body="${body//$'\n'/'%0A'}"
+            body="${body//$'\r'/'%0D'}" 
+            echo ::set-output name=body::$body
+
         - name: Playbook PR Comment - Ansible Tower
           env:
             URL: ${{ github.event.pull_request.comments_url }}
@@ -36,4 +45,4 @@ jobs:
               $URL \
               -H "Content-Type: application/json" \
               -H "Authorization: token $GITHUB_TOKEN" \
-              --data '{ "body": "$(cat playbook_output)" }'
+              --data '{ "body": "${{steps.playbook_output.outputs.body}}" }'
