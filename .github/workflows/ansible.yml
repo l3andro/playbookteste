@@ -29,9 +29,10 @@ jobs:
         - name: Get Output
           id: playbook_output
           run: |
-            body=$(cat playbook_output)
+            body=$(cat playbook_output |sed 's/[{}]//g')
             body="${body//'%'/'%25'}"
             body="${body//$'\n'/'%0A'}"
+            body="${body//$'\r'/'%0D'}"
             body="${body//$'\r'/'%0D'}" 
             echo ::set-output name=body::$body
 
