@@ -43,6 +43,5 @@ jobs:
             curl \
               -X POST \
               $URL \
-              -H "Content-Type: application/json" \
               -H "Authorization: token $GITHUB_TOKEN" \
               --data '{ "body": "${{steps.playbook_output.outputs.body}}" }'
