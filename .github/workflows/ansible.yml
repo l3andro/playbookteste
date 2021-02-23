@@ -28,7 +28,7 @@ jobs:
 
         - name: Get Output
           id: playbook_output
-          run: echo "::set-output name=playbook_result::$(cat playbook_output)
+          run: echo "::set-output name=playbook_result::$(cat playbook_output)"
 
         - name: Playbook PR Comment - Ansible Tower
           env:
