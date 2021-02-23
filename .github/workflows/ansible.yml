@@ -8,6 +8,6 @@ jobs:
     runs-on: self-hosted
     steps:
         - name: Get Playbook Id from Ansible Tower
-          if: startsWith( github.event.pull_request.title, 'playbook' )
+          if: contains( github.event.comment.body, 'playbook_run' )
           id: get_playbook_id
-          run: echo "Teste OK"
+          run: echo "Teste OK "
