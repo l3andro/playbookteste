@@ -17,9 +17,10 @@ jobs:
 
         - name: Playbook Job Wait - Ansible Tower
           run: |
-              result="null"
-              while [$result -eq "null"]; do
+              result=""
+              while [[ -z $result ]]; do
                 result=$(curl -k -X GET -H 'Authorization:Bearer hctqGx2DT6KnccCVhFORyt8JxYW5eN' https://ansible-awx-hmlg.wirecard.int/api/v2/jobs/${{steps.playbook_check.outputs.playbook_job_id}}/ | jq -r .finished)
+                sleep 10
               done
 
         - name: Playbook Job Output - Ansible Tower
