@@ -24,7 +24,7 @@ jobs:
               done
 
         - name: Playbook Job Output - Ansible Tower
-          run: curl -k -X GET -H 'Authorization:Bearer hctqGx2DT6KnccCVhFORyt8JxYW5eN' https://ansible-awx-hmlg.wirecard.int/api/v2/jobs/${{steps.playbook_check.outputs.playbook_job_id}}/stdout/?format=ansi > playbook_output
+          run: curl -k -X GET -H 'Authorization:Bearer hctqGx2DT6KnccCVhFORyt8JxYW5eN' https://ansible-awx-hmlg.wirecard.int/api/v2/jobs/${{steps.playbook_check.outputs.playbook_job_id}}/stdout/?format=json > playbook_output
 
         - name: Get Output
           id: playbook_output
