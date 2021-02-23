@@ -13,7 +13,7 @@ jobs:
 
         - name: Playbook Check Mode - Ansible Tower
           id: playbook_check
-          run: echo "::set-output name=playbook_job_id::$(curl -k -X POST -d '{"extra_vars":{ "job_type":"check"}}' -H 'Content-Type:application/json' -H 'Authorization:Bearer ${{ secrets.AWX_TOKEN }}' https://ansible-awx-hmlg.wirecard.int/api/v2/workflow_job_templates/${{steps.get_playbook_id.outputs.playbook_id}}/launch/ |jq -r .job)"
+          run: echo "::set-output name=playbook_job_id::$(curl -k -X POST -d '{"extra_vars":{ "job_type":"check"}}' -H 'Content-Type:application/json' -H 'Authorization:Bearer ${{ secrets.AWX_TOKEN }}' https://ansible-awx-hmlg.wirecard.int/api/v2/job_templates/${{steps.get_playbook_id.outputs.playbook_id}}/launch/ |jq -r .job)"
 
         - name: Playbook Job Wait - Ansible Tower
           run: |
