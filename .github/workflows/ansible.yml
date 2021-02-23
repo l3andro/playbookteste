@@ -40,8 +40,8 @@ jobs:
             URL: ${{ github.event.pull_request.comments_url }}
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           run: |
-            curl \
-              -X POST \
-              $URL \
+            jq -nc '{"body":"${{steps.playbook_output.outputs.body}}"}' | \
+            curl -L -X POST -d @- \
+              -H "Content-Type: application/json" \
               -H "Authorization: token $GITHUB_TOKEN" \
-              --data '{ "body": "${{steps.playbook_output.outputs.body}}" }'
+              $URL
