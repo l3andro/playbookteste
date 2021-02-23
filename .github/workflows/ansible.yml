@@ -1,13 +1,39 @@
-name: Ansible-Integration
+name: Playbook-Check
 on:
-  issue_comment:
-    types: [created]
+  pull_request:
+    types: [opened]
 jobs:
   Ansible-Integration:
-    if: github.event.issue.pull_request
     runs-on: self-hosted
     steps:
         - name: Get Playbook Id from Ansible Tower
-          if: contains( github.event.comment.body, 'playbook_run' )
+          if: startsWith( github.event.pull_request.title, 'playbook' )
           id: get_playbook_id
-          run: echo "Teste OK "
+          run: echo "::set-output name=playbook_id::$(curl -k -X GET -H 'Authorization:Bearer ${{ secrets.AWX_TOKEN }}' https://ansible-awx-hmlg.wirecard.int/api/v2/job_templates/?name=${{github.event.pull_request.title}} |jq -r .results[0].id)"
+
+        - name: Playbook Check Mode - Ansible Tower
+          id: playbook_check
+          run: echo "::set-output name=playbook_job_id::$(curl -k -X POST -d '{"extra_vars":{ "job_type":"check"}}' -H 'Content-Type:application/json' -H 'Authorization:Bearer ${{ secrets.AWX_TOKEN }}' https://ansible-awx-hmlg.wirecard.int/api/v2/workflow_job_templates/${{steps.get_playbook_id.outputs.playbook_id}}/launch/ |jq -r .job)
+
+        - name: Playbook Job Wait - Ansible Tower
+          id: playbook_wait
+          run: |
+              while [${{steps.playbook_wait.outputs.playbook_finished}} -eq "null"]; do
+                echo "::set-output name=playbook_finished::$(curl -k -X GET -H 'Authorization:Bearer hctqGx2DT6KnccCVhFORyt8JxYW5eN' https://ansible-awx-hmlg.wirecard.int/api/v2/jobs/${{steps.playbook_check.outputs.playbook_job_id}}/ | jq -r .finished)
+              done
+
+        - name: Playbook Job Output - Ansible Tower
+          id: playbook_job
+          run: echo "::set-output name=playbook_output::$(curl -k -X GET -H 'Authorization:Bearer hctqGx2DT6KnccCVhFORyt8JxYW5eN' https://ansible-awx-hmlg.wirecard.int/api/v2/jobs/${{steps.playbook_check.outputs.playbook_job_id}}/stdout/?format=txt)
+
+        - name: Playbook PR Comment - Ansible Tower
+          env:
+            URL: ${{ github.event.pull_request.comments_url }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            curl \
+              -X POST \
+              $URL \
+              -H "Content-Type: application/json" \
+              -H "Authorization: token $GITHUB_TOKEN" \
+              --data '{ "body": "${{steps.playbook_job.outputs.playbook_output}}" }'
