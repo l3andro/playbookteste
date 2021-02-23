@@ -16,10 +16,10 @@ jobs:
           run: echo "::set-output name=playbook_job_id::$(curl -k -X POST -d '{"extra_vars":{ "job_type":"check"}}' -H 'Content-Type:application/json' -H 'Authorization:Bearer ${{ secrets.AWX_TOKEN }}' https://ansible-awx-hmlg.wirecard.int/api/v2/workflow_job_templates/${{steps.get_playbook_id.outputs.playbook_id}}/launch/ |jq -r .job)"
 
         - name: Playbook Job Wait - Ansible Tower
-          id: playbook_wait
           run: |
-              while [${{steps.playbook_wait.outputs.playbook_finished}} -eq "null"]; do
-                echo "::set-output name=playbook_finished::$(curl -k -X GET -H 'Authorization:Bearer hctqGx2DT6KnccCVhFORyt8JxYW5eN' https://ansible-awx-hmlg.wirecard.int/api/v2/jobs/${{steps.playbook_check.outputs.playbook_job_id}}/ | jq -r .finished)"
+              result="null"
+              while [$result -eq "null"]; do
+                result=$(curl -k -X GET -H 'Authorization:Bearer hctqGx2DT6KnccCVhFORyt8JxYW5eN' https://ansible-awx-hmlg.wirecard.int/api/v2/jobs/${{steps.playbook_check.outputs.playbook_job_id}}/ | jq -r .finished)
               done
 
         - name: Playbook Job Output - Ansible Tower
