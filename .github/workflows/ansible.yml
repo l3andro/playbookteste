@@ -33,9 +33,10 @@ jobs:
             body="${body//'%'/'%25'}"
             body="${body//$'\n'/'%0A'}"
             body="${body//$'\r'/'%0D'}"
-            body="${body//$'[{}]'/''}"
-            body="${body//$'\{'/''}"
-            body="${body//$'\}'/''}" 
+            body="${body//$'['/''}"
+            body="${body//$']'/''}"
+            body="${body//$'{'/''}"
+            body="${body//$'}'/''}" 
             echo ::set-output name=body::$body
 
         - name: Playbook PR Comment - Ansible Tower
