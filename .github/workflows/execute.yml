@@ -1,10 +1,10 @@
-name: Playbook-Run
+name: Playbook-Apply
 on:
   issue_comment:
     types: [created]
 jobs:
-  Playbook-Run:
-    if: github.event.issue.pull_request
+  Playbook-Apply:
+    if: github.event.issue.pull_request && startsWith( github.event.pull_request.title, 'playbook' )
     runs-on: self-hosted
     steps:        
         - name: Ansible AWX - Set Parameters
@@ -14,8 +14,8 @@ jobs:
               echo "GITHUB_URL=${{ github.event.pull_request.comments_url }}" >> $GITHUB_ENV
               echo "GITHUB_TOKEN= ${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
 
-        - name: Ansible AWX - Run Playbook in Check Mode
+        - name: Ansible AWX - Run Playbook in Run Mode
           uses: docker://l3andro4mc/ansible_awx_action:v1.0
-          if: startsWith( github.event.pull_request.title, 'playbook' ) && contains( github.event.comment.body, 'playbook_run' )
+          if: contains( github.event.comment.body, 'playbook_run' )
           with:
             args: ${{ env.baseURL }} ${{ secrets.AWX_TOKEN }} ${{ env.playbook_Name }} ${{ env.GITHUB_URL}} ${{ env.GITHUB_TOKEN}} run
