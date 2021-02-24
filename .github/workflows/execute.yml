@@ -16,6 +16,6 @@ jobs:
 
         - name: Ansible AWX - Playbook Run
           uses: docker://l3andro4mc/ansible_awx_action:v1.0
-          if: contains( github.event.comment.body, 'playbook_run' ) && startsWith( github.event.pull_request.title, 'playbook' )
+          if: contains( github.event.comment.body, 'playbook_run' )
           with:
             args: ${{ env.baseURL }} ${{ secrets.AWX_TOKEN }} ${{ env.playbook_Name }} ${{ env.GITHUB_URL}} ${{ env.GITHUB_TOKEN}} run
