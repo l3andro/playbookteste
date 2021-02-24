@@ -4,7 +4,7 @@ on:
     types: [created]
 jobs:
   Playbook-Apply:
-    if: github.event.issue.pull_request && startsWith( github.event.pull_request.title, 'playbook' )
+    if: github.event.issue.pull_request
     runs-on: self-hosted
     steps:        
         - name: Ansible AWX - Set Parameters
@@ -16,6 +16,6 @@ jobs:
 
         - name: Ansible AWX - Playbook Apply
           uses: docker://l3andro4mc/ansible_awx_action:v1.0
-          if: contains( github.event.comment.body, 'playbook_run' )
+          if: contains( github.event.comment.body, 'playbook_run' ) && startsWith( github.event.pull_request.title, 'playbook' )
           with:
             args: ${{ env.baseURL }} ${{ secrets.AWX_TOKEN }} ${{ env.playbook_Name }} ${{ env.GITHUB_URL}} ${{ env.GITHUB_TOKEN}} run
