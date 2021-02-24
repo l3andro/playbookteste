@@ -13,7 +13,7 @@ jobs:
               echo "playbook_Name=${{github.event.issue.title}}" >> $GITHUB_ENV
               echo "GITHUB_URL=${{ github.event.issue.comments_url }}" >> $GITHUB_ENV
               echo "GITHUB_TOKEN= ${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
-              env
+              git config --global user.name "Playbook-Run (SRE bot)"
 
         - name: Ansible AWX - Playbook Run Mode
           uses: docker://l3andro4mc/ansible_awx_action:v1.0

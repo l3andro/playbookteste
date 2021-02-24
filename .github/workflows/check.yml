@@ -12,6 +12,7 @@ jobs:
               echo "playbook_Name=${{github.event.pull_request.title}}" >> $GITHUB_ENV
               echo "GITHUB_URL=${{ github.event.pull_request.comments_url }}" >> $GITHUB_ENV
               echo "GITHUB_TOKEN= ${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+              git config --global user.name "Playbook-Check (SRE bot)"
 
         - name: Ansible AWX - Run Playbook in Check Mode
           uses: docker://l3andro4mc/ansible_awx_action:v1.0
