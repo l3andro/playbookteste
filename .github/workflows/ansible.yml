@@ -6,46 +6,15 @@ jobs:
   Ansible-Integration:
     runs-on: self-hosted
     steps:
-        - name: Get Playbook ID from Ansible Tower
+        - name: Ansible AWX - Set Parameters
+          run: |
+              echo "baseURL=https://ansible-awx-hmlg.wirecard.int" >> $GITHUB_ENV
+              echo "playbook_Name=${{github.event.pull_request.title}}" >> $GITHUB_ENV
+              echo "GITHUB_URL=${{ github.event.pull_request.comments_url }}" >> $GITHUB_ENV
+              echo "GITHUB_TOKEN= ${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+
+        - name: Ansible AWX - Run Playbook in Check Mode
+          uses: docker://l3andro4mc/ansible_awx_action:v1.0
           if: startsWith( github.event.pull_request.title, 'playbook' )
-          id: get_playbook_id
-          run: echo "::set-output name=playbook_id::$(curl -k -X GET -H 'Authorization:Bearer ${{ secrets.AWX_TOKEN }}' https://ansible-awx-hmlg.wirecard.int/api/v2/job_templates/?name=${{github.event.pull_request.title}} |jq -r .results[0].id)"
-
-        - name: Playbook Check Mode - Ansible Tower
-          id: playbook_check
-          run: echo "::set-output name=playbook_job_id::$(curl -k -X POST -d '{"extra_vars":{ "job_type":"check"}}' -H 'Content-Type:application/json' -H 'Authorization:Bearer ${{ secrets.AWX_TOKEN }}' https://ansible-awx-hmlg.wirecard.int/api/v2/job_templates/${{steps.get_playbook_id.outputs.playbook_id}}/launch/ |jq -r .job)"
-
-        - name: Playbook Job Wait - Ansible Tower
-          run: |
-              result=""
-              while [[ -z $result ]]; do
-                result=$(curl -k -X GET -H 'Authorization:Bearer hctqGx2DT6KnccCVhFORyt8JxYW5eN' https://ansible-awx-hmlg.wirecard.int/api/v2/jobs/${{steps.playbook_check.outputs.playbook_job_id}}/ | jq -r .finished)
-                sleep 10
-              done
-
-        - name: Playbook Job Output - Ansible Tower
-          run: curl -k -X GET -H 'Authorization:Bearer hctqGx2DT6KnccCVhFORyt8JxYW5eN' https://ansible-awx-hmlg.wirecard.int/api/v2/jobs/${{steps.playbook_check.outputs.playbook_job_id}}/stdout/?format=ansi > playbook_output
-
-        - name: Get Output
-          id: playbook_output
-          run: |
-            body=$(cat playbook_output)
-            body="${body//'%'/'%25'}"
-            body="${body//$'\n'/'%0A'}"
-            body="${body//$'\r'/'%0D'}"
-            body="${body//$'['/''}"
-            body="${body//$']'/''}"
-            body="${body//$'{'/''}"
-            body="${body//$'}'/''}" 
-            echo ::set-output name=body::$body
-
-        - name: Playbook PR Comment - Ansible Tower
-          env:
-            URL: ${{ github.event.pull_request.comments_url }}
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          run: |
-            jq -nc '{"body":"${{steps.playbook_output.outputs.body}}"}' | \
-            curl -L -X POST -d @- \
-              -H "Content-Type: application/json" \
-              -H "Authorization: token $GITHUB_TOKEN" \
-              $URL
+          with:
+            args: ${{ env.baseURL }} ${{ secrets.AWX_TOKEN }} ${{ env.playbook_Name }} ${{ env.GITHUB_URL}} ${{ env.GITHUB_TOKEN}} check
