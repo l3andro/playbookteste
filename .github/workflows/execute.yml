@@ -1,9 +1,9 @@
-name: Playbook-Run
+name: Playbook-Apply
 on:
   issue_comment:
     types: [created]
 jobs:
-  Playbook-Run:
+  Playbook-Apply:
     if: github.event.issue.pull_request
     runs-on: self-hosted
     steps:        
