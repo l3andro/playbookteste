@@ -10,12 +10,12 @@ jobs:
         - name: Ansible AWX - Set Parameters
           run: |
               echo "baseURL=https://ansible-awx-hmlg.wirecard.int" >> $GITHUB_ENV
-              echo "playbook_Name=${{github.event.pull_request.title}}" >> $GITHUB_ENV
+              echo "playbook_Name=${{github.event.issue.title}}" >> $GITHUB_ENV
               echo "GITHUB_URL=${{ github.event.issue.comments_url }}" >> $GITHUB_ENV
               echo "GITHUB_TOKEN= ${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
               env
 
-        - name: Ansible AWX - Playbook Run Mode
+        - name: Ansible AWX - Playbook Run
           uses: docker://l3andro4mc/ansible_awx_action:v1.0
           if: contains( github.event.comment.body, 'playbook_run' )
           with:
