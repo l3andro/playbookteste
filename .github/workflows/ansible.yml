@@ -1,4 +1,4 @@
-name: Playbook-Check
+name: Ansible-Integration
 on:
   pull_request:
     types: [opened]
@@ -19,7 +19,6 @@ jobs:
           with:
             args: ${{ env.baseURL }} ${{ secrets.AWX_TOKEN }} ${{ env.playbook_Name }} ${{ env.GITHUB_URL}} ${{ env.GITHUB_TOKEN}} check
 
-name: Playbook-Run
 on:
   issue_comment:
     types: [created]
