@@ -14,7 +14,7 @@ jobs:
               echo "GITHUB_URL=${{ github.event.pull_request.comments_url }}" >> $GITHUB_ENV
               echo "GITHUB_TOKEN= ${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
 
-        - name: Ansible AWX - Run Playbook in Run Mode
+        - name: Ansible AWX - Playbook Apply
           uses: docker://l3andro4mc/ansible_awx_action:v1.0
           if: contains( github.event.comment.body, 'playbook_run' )
           with:
