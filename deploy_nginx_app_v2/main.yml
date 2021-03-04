@@ -1,5 +1,5 @@
 ---
-- name: Remove Nginx
+- name: Deploy Nginx App v2
   hosts: all
 
   roles:
